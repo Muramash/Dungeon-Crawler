@@ -1,0 +1,44 @@
+﻿  main.cpp
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\Enemy.h(32,29): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\Enemy.h(35,29): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\Ground.h(25,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\Ground.h(28,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\Player.h(33,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\Player.h(36,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\main.cpp(456,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\main.cpp(518,37): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\main.cpp(523,37): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\33649\source\repos\Dungeon Crawler\Dungeon Crawler\main.cpp(531,21): warning C4018: '<' : incompatibilité signed/unsigned
+  Dungeon Crawler.vcxproj -> C:\Users\33649\source\repos\Dungeon Crawler\Debug\Dungeon Crawler.exe
