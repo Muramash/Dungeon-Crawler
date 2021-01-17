@@ -429,6 +429,16 @@ int main()
 	int lineCheck = 0;
 	std::vector<Ground*> collisionTab;
 
+	bool isRotating = false;
+	float rotationStep = 5.f;
+	float currentRotation = 0.f;
+	sf::Vector2f topDirections[4];
+	topDirections[0] = sf::Vector2f(0.f, -1.f);
+	topDirections[1] = sf::Vector2f(1.f, 0.f);
+	topDirections[2] = sf::Vector2f(0.f, 1.f);
+	topDirections[3] = sf::Vector2f(-1.f, 0.f);
+	int topDirectionIndex = 0;
+
 	//Wall texture
 	sf::Texture wallTexture;
 	if (!wallTexture.loadFromFile("res/img/wall.png")) {
@@ -487,9 +497,9 @@ int main()
 	{
 		sf::Event event;
 		//Movement Handling /!\ TEMPORARY FOR TEST PURPOSE ONLY
-		const float moveSpeed = 5;
+		const float moveSpeed = 0.8;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 			player.move({ 0, -moveSpeed });
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
@@ -500,6 +510,24 @@ int main()
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 			player.move({ -moveSpeed, 0 });
+		}*/
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !isRotating) {
+			isRotating = true;
+		}
+		if (isRotating) {
+			currentRotation += rotationStep;
+			view.rotate(rotationStep); // TODO: * deltaTime
+			player.rotate(rotationStep); // TODO: * deltaTime
+			if (currentRotation >= 90) {
+				isRotating = false;
+				currentRotation = 0;
+				topDirectionIndex == 3 ? topDirectionIndex = 0 : topDirectionIndex += 1;
+			}
+		}
+		else {
+			// We move only if the game isn't rotating
+			player.move(moveSpeed * topDirections[topDirectionIndex]);
 		}
 
 

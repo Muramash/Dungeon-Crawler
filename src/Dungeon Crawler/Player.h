@@ -12,6 +12,7 @@ public:
 	Player(sf::Vector2f size, sf::Texture *texture) {
 		player.setSize(size);
 		player.setTexture(texture);
+		player.setOrigin(size.x / 2, size.y / 2);
 	}
 
 	void drawTo(sf::RenderWindow& window) {
@@ -24,6 +25,10 @@ public:
 
 	void setPos(sf::Vector2f newPos) {
 		player.setPosition(newPos);
+	}
+
+	void rotate(float angle) {
+		player.rotate(angle);
 	}
 
 	sf::FloatRect getGlobalBounds() {
