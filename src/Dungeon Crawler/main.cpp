@@ -649,7 +649,7 @@ int main()
 
 		sf::Event event;
 		//Movement Handling /!\ TEMPORARY FOR TEST PURPOSE ONLY
-		const float moveSpeed = 80.f;
+		const float moveSpeed = 150.f;
 
 		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 			player.move({ 0, -moveSpeed });
@@ -664,7 +664,7 @@ int main()
 			player.move({ -moveSpeed, 0 });
 		}*/
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spaceReleased) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && spaceReleased) {
 			if (nbSpacePressed <= 3)
 				++nbSpacePressed;
 			spaceReleased = false;
@@ -712,9 +712,9 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == sf::Event::KeyReleased)
+			if (event.type == sf::Event::MouseButtonReleased)
 			{
-				if (event.key.code == sf::Keyboard::Space)
+				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					spaceReleased = true;
 				}
