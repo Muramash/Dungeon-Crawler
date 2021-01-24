@@ -5,6 +5,8 @@
 #include "Coin.h"
 #include "Enemy.h"
 #include "Ground.h"
+#include "EmptySpace.h"
+
 
 class Player
 {
