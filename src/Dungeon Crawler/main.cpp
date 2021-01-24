@@ -411,6 +411,10 @@ int main()
 	//std::cout << "test = " << _tiles << std::endl;
 	const int screenDimensionX = 700;
 	const int screenDimensionY = 500;
+	sf::Clock clock = sf::Clock();
+	float deltaTime;
+	int nbSpacePressed = 0;
+	bool spaceReleased = true;
 
 	//sf::RenderWindow window(sf::VideoMode(700, 500), "Dungeon Crawler");
 	sf::RenderWindow window(sf::VideoMode(screenDimensionX, screenDimensionY), "Dungeon Crawler");
@@ -430,7 +434,7 @@ int main()
 	std::vector<Ground*> collisionTab;
 
 	bool isRotating = false;
-	float rotationStep = 5.f;
+	float rotationStep = 240.f;
 	float currentRotation = 0.f;
 	sf::Vector2f topDirections[4];
 	topDirections[0] = sf::Vector2f(0.f, -1.f);
@@ -441,7 +445,7 @@ int main()
 
 	//Wall texture
 	sf::Texture wallTexture;
-	if (!wallTexture.loadFromFile("res/img/wall.png")) {
+	if (!wallTexture.loadFromFile("src/Dungeon\ Crawler/res/img/wall.png")) {
 		std::cout << "Load failed" << std::endl;
 
 		system("pause");
@@ -450,7 +454,7 @@ int main()
 	//Player instance
 	sf::Texture playertexture;
 
-	if (!playertexture.loadFromFile("res/img/slime.jpg")) {
+	if (!playertexture.loadFromFile("src/Dungeon\ Crawler/res/img/slime.jpg")) {
 		std::cout << "Load failed" << std::endl;
 
 		system("pause");
@@ -502,9 +506,10 @@ int main()
 
 	while (window.isOpen())
 	{
+		deltaTime = clock.restart().asSeconds();
 		sf::Event event;
 		//Movement Handling /!\ TEMPORARY FOR TEST PURPOSE ONLY
-		const float moveSpeed = 0.8;
+		const float moveSpeed = 80.f;
 
 		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 			player.move({ 0, -moveSpeed });
@@ -519,22 +524,31 @@ int main()
 			player.move({ -moveSpeed, 0 });
 		}*/
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !isRotating) {
-			isRotating = true;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && spaceReleased) {
+			if (nbSpacePressed <= 3)
+				++nbSpacePressed;
+			spaceReleased = false;
+			//isRotating = true;
 		}
-		if (isRotating) {
-			currentRotation += rotationStep;
-			view.rotate(rotationStep); // TODO: * deltaTime
-			player.rotate(rotationStep); // TODO: * deltaTime
-			if (currentRotation >= 90) {
-				isRotating = false;
+		if (nbSpacePressed >= 1) {
+			float currentStep = rotationStep * deltaTime;
+			if (currentRotation + currentStep > 90.f)
+			{
+				currentStep = 90.f - currentRotation;
+			}
+			currentRotation += currentStep;
+			view.rotate(currentStep);
+			player.rotate(currentStep);
+			if (currentRotation == 90.f) {
+				--nbSpacePressed;
+				//isRotating = false;
 				currentRotation = 0;
 				topDirectionIndex == 3 ? topDirectionIndex = 0 : topDirectionIndex += 1;
 			}
 		}
 		else {
 			// We move only if the game isn't rotating
-			player.move(moveSpeed * topDirections[topDirectionIndex]);
+			player.move((moveSpeed * deltaTime) * topDirections[topDirectionIndex]);
 
 			// check possible collisions in this view
 			// bug au lancement tant qu'on ne tourne pas le perso il n'y a jamais aucune collision detecté
@@ -545,7 +559,7 @@ int main()
 				if (ground > 0) {
 					std::cout << "possible collisions ! " << player.isCollidingWithGround(ground) << std::endl;
 					if (player.isCollidingWithGround(ground)) {
-						player.move(-(moveSpeed * topDirections[topDirectionIndex]));
+						player.move(-((moveSpeed * deltaTime) * topDirections[topDirectionIndex]));
 					}
 				}
 			}
@@ -558,6 +572,13 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::KeyReleased)
+			{
+				if (event.key.code == sf::Keyboard::Space)
+				{
+					spaceReleased = true;
+				}
+			}
 		}
 
 
