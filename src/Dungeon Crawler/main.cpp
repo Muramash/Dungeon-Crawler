@@ -1,11 +1,11 @@
 #include <random>
-#include <vector>
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Coin.h"
 #include "Ground.h"
 #include "Enemy.h"
+#include "QuadTree.h"
 
 namespace
 {
@@ -491,7 +491,14 @@ int main()
 		LayerY = LayerY + 40;
 	}
 
+	//create quadTree to check collisions
+	//QuadTree quadTree(sf::FloatRect(player.getX() - screenPosition.x, player.getY() - screenPosition.y, screenDimensionX, screenDimensionY),0);// fait la taille de l'ecran
+	QuadTree quadTree(sf::FloatRect(0.f, 0.f, 70 * 40, 20 * 40), 0);//le quadtree fait la taille du fichier
 
+	for (int i = 0; i < wallVector.size(); i++) {
+		// Add object in the quadTree
+		quadTree.insert(wallVector[i]);
+	}
 
 	while (window.isOpen())
 	{
@@ -511,7 +518,7 @@ int main()
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 			player.move({ -moveSpeed, 0 });
 		}*/
-		
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !isRotating) {
 			isRotating = true;
 		}
@@ -528,6 +535,22 @@ int main()
 		else {
 			// We move only if the game isn't rotating
 			player.move(moveSpeed * topDirections[topDirectionIndex]);
+
+			// check possible collisions in this view
+			// bug au lancement tant qu'on ne tourne pas le perso il n'y a jamais aucune collision detecté
+			// bug les collisions se font que dans un certain rayon puis plus rien il faudrait refaire le quadtree à chaque fois que le player en sort ?
+			std::vector<Ground*> groundVector = quadTree.getObjects(sf::FloatRect(player.getX(), player.getY(), player.getGlobalBounds().height, player.getGlobalBounds().width));
+
+			for (Ground* ground : groundVector) {
+				if (ground > 0) {
+					std::cout << "possible collisions ! " << player.isCollidingWithGround(ground) << std::endl;
+					if (player.isCollidingWithGround(ground)) {
+						player.move(-(moveSpeed * topDirections[topDirectionIndex]));
+					}
+				}
+			}
+
+			//quadTree.Clear();
 		}
 
 
@@ -559,6 +582,9 @@ int main()
 		for (int i = 0; i < wallVector.size(); i++) {
 			wallVector[i]->drawTo(window);
 		}
+		//Quadtree
+		quadTree.Draw(window);
+
 		window.setView(window.getDefaultView());
 
 		window.display();
