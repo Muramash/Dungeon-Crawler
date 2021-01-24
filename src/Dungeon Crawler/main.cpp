@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "QuadTree.h"
 #include "EmptySpace.h"
+#include "Stairs.h"
 
 
 namespace
@@ -408,11 +409,11 @@ int main()
 
 	Dungeon d(70, 20);
 	d.generate(15);
-	d.print();
+	//d.print();
 	std::vector<char> allTiles = d.getTiles();
 
-	std::cout << "Press Enter to quit... ";
-	std::cin.get();
+	//std::cout << "Press Enter to quit... ";
+	//std::cin.get();
 	//std::cout << "test = " << _tiles << std::endl;
 	const int screenDimensionX = 700;
 	const int screenDimensionY = 500;
@@ -458,6 +459,15 @@ int main()
 		system("pause");
 	}
 
+	//Stairs texture
+	sf::Texture stairsTexture;
+	if (!stairsTexture.loadFromFile("res/img/stairs.png")) {
+		std::cout << "Load failed" << std::endl;
+
+		system("pause");
+	}
+	Stairs stairs({ globalBlocSizeX,globalBlocSizeY }, &stairsTexture);
+
 	//Coin texture
 	sf::Texture coinTexture;
 	if (!coinTexture.loadFromFile("res/img/coin.png")) {
@@ -482,7 +492,7 @@ int main()
 
 		system("pause");
 	}
-	Player player({ 30,30 }, &playertexture);
+	Player player({ 20,20 }, &playertexture);
 	player.setPos({ 50,500 });
 
 	//Game Over object
@@ -531,6 +541,8 @@ int main()
 	std::vector<Enemy*> enemyVector;
 	std::vector<EmptySpace*> emptyVector;
 
+	float playerX = 0.f, playerY = 0.f;
+
 	for (int i = 0; i < allTiles.size(); i++) {
 		//Go to a new line
 		if (lineCheck == 70) {
@@ -550,6 +562,12 @@ int main()
 		//If Tile = Character
 		if (allTiles[i] == '>') {
 			player.setPos({ LayerY, LayerX });
+			playerX = LayerY;
+			playerY = LayerX;
+		}
+		//If Tile = Stairs
+		if (allTiles[i] == '<') {
+			stairs.setPos({ LayerY, LayerX });
 		}
 		//Generate coin or monster on empty space
 		if (allTiles[i] == ' ') {
@@ -603,13 +621,15 @@ int main()
 	}
 
 	//create quadTree to check collisions
-	//QuadTree quadTree(sf::FloatRect(player.getX() - screenPosition.x, player.getY() - screenPosition.y, screenDimensionX, screenDimensionY),0);// fait la taille de l'ecran
-	QuadTree quadTree(sf::FloatRect(0.f, 0.f, 70 * 40, 20 * 40), 0);//le quadtree fait la taille du fichier
+	QuadTree quadTree(sf::FloatRect(0.f, 0.f, 70 * 40, 20 * 40), 0);
 
+	// Add objects in the quadTree
 	for (int i = 0; i < wallVector.size(); i++) {
-		// Add object in the quadTree
 		quadTree.insert(wallVector[i]);
 	}
+
+	bool isPlaying = true, first = false, mainMenu = true;
+	float posX = 0.f, posY = 0.f;
 
 	while (window.isOpen())
 	{
@@ -648,119 +668,266 @@ int main()
 		}
 
 		sf::Event event;
-		//Movement Handling /!\ TEMPORARY FOR TEST PURPOSE ONLY
-		const float moveSpeed = 150.f;
 
-		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-			player.move({ 0, -moveSpeed });
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-			player.move({ 0, moveSpeed });
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-			player.move({ moveSpeed, 0 });
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-			player.move({ -moveSpeed, 0 });
-		}*/
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && spaceReleased) {
-			if (nbSpacePressed <= 3)
-				++nbSpacePressed;
-			spaceReleased = false;
-			//isRotating = true;
-		}
-		if (nbSpacePressed >= 1) {
-			float currentStep = rotationStep * deltaTime;
-			if (currentRotation + currentStep > 90.f)
+		if (mainMenu) {
+			while (window.pollEvent(event))
 			{
-				currentStep = 90.f - currentRotation;
+				if (event.type == sf::Event::Closed)
+					window.close();
 			}
-			currentRotation += currentStep;
-			view.rotate(currentStep);
-			player.rotate(currentStep);
-			if (currentRotation == 90.f) {
-				--nbSpacePressed;
-				//isRotating = false;
-				currentRotation = 0;
-				topDirectionIndex == 3 ? topDirectionIndex = 0 : topDirectionIndex += 1;
+
+			window.setView(view);
+			window.clear();
+
+			view.setCenter(screenPosition);
+
+			//Name of the game
+			sf::Text message;
+			message.setString("Dungeon Crawler");
+			sf::Font font;
+			font.loadFromFile("res/fonts/minecraft.ttf");
+			message.setFont(font);
+			message.setCharacterSize(70);
+			sf::FloatRect messageRect = message.getLocalBounds();
+			message.setOrigin(messageRect.left + messageRect.width / 2.0f, messageRect.top + messageRect.height / 2.0f);
+			message.setPosition(sf::Vector2f(screenPosition.x, screenPosition.y - 100.f));
+
+			//Instruction to start the game
+			sf::Text scoreMessage;
+			scoreMessage.setString("Press enter to start !");
+			scoreMessage.setFont(font);
+			scoreMessage.setCharacterSize(40);
+			sf::FloatRect scoreMessageRect = scoreMessage.getLocalBounds();
+			scoreMessage.setOrigin(scoreMessageRect.left + scoreMessageRect.width / 2.0f, scoreMessageRect.top + scoreMessageRect.height / 2.0f);
+			scoreMessage.setPosition(sf::Vector2f(screenPosition.x, screenPosition.y + 60.f));
+
+			// animation of the player in the main menu
+			posX += 1.f;
+			if (posX > view.getSize().x) {
+				posX = 0.f;
+			}
+			if (posX >= view.getCenter().x - 200.f && posX <= view.getCenter().x - 180.f || posX >= view.getCenter().x - 20.f && posX <= view.getCenter().x || posX >= view.getCenter().x + 180.f && posX <= view.getCenter().x + 200.f) {
+				posY -= 1.f;
+			}
+			else if (posX > view.getCenter().x - 180.f && posX <= view.getCenter().x - 160.f || posX > view.getCenter().x && posX <= view.getCenter().x + 20.f || posX > view.getCenter().x + 200.f && posX <= view.getCenter().x + 220.f) {
+				posY += 1.f;
+			}
+			else {
+				posY = view.getCenter().y + 170.f;
+			}
+			player.setPos({ posX, posY });
+
+			window.draw(message);
+			window.draw(scoreMessage);
+			player.drawTo(window);
+
+			window.setView(window.getDefaultView());
+
+			window.display();
+
+			// launch the game
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+				player.setPos({ playerX, playerY });
+				mainMenu = false;
 			}
 		}
 		else {
-			// We move only if the game isn't rotating
-			player.move((moveSpeed * deltaTime) * topDirections[topDirectionIndex]);
+			if (isPlaying) {
+				//Movement Handling /!\ TEMPORARY FOR TEST PURPOSE ONLY
+				const float moveSpeed = 150.f;
 
-			// check possible collisions in this view
-			// bug au lancement tant qu'on ne tourne pas le perso il n'y a jamais aucune collision detect�
-			// bug les collisions se font que dans un certain rayon puis plus rien il faudrait refaire le quadtree � chaque fois que le player en sort ?
-			std::vector<Ground*> groundVector = quadTree.getObjects(sf::FloatRect(player.getX(), player.getY(), player.getGlobalBounds().height, player.getGlobalBounds().width));
+				/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+					player.move({ 0, -moveSpeed });
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+					player.move({ 0, moveSpeed });
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+					player.move({ moveSpeed, 0 });
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+					player.move({ -moveSpeed, 0 });
+				}*/
 
-			for (Ground* ground : groundVector) {
-				if (ground > 0) {
-					std::cout << "possible collisions ! " << player.isCollidingWithGround(ground) << std::endl;
-					if (player.isCollidingWithGround(ground)) {
-						player.move(-((moveSpeed * deltaTime) * topDirections[topDirectionIndex]));
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && spaceReleased) {
+					if (nbSpacePressed <= 3)
+						++nbSpacePressed;
+					spaceReleased = false;
+					//isRotating = true;
+				}
+				if (nbSpacePressed >= 1) {
+					float currentStep = rotationStep * deltaTime;
+					if (currentRotation + currentStep > 90.f)
+					{
+						currentStep = 90.f - currentRotation;
+					}
+					currentRotation += currentStep;
+					view.rotate(currentStep);
+					player.rotate(currentStep);
+					if (currentRotation == 90.f) {
+						--nbSpacePressed;
+						//isRotating = false;
+						currentRotation = 0;
+						topDirectionIndex == 3 ? topDirectionIndex = 0 : topDirectionIndex += 1;
 					}
 				}
-			}
+				else {
+					// We move only if the game isn't rotating
+					player.move((moveSpeed * deltaTime) * topDirections[topDirectionIndex]);
 
-			//quadTree.Clear();
-		}
+					if (player.isCollidingWithStairs(stairs)) {
+						isPlaying = false;
+					}
 
+					std::vector<Ground*> groundVector = quadTree.getObjects(sf::FloatRect(player.getX(), player.getY(), player.getGlobalBounds().height, player.getGlobalBounds().width));
 
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-			if (event.type == sf::Event::MouseButtonReleased)
-			{
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					spaceReleased = true;
+					// check collisions with ground
+					for (Ground* ground : groundVector) {
+						if (ground > 0) {
+							std::cout << "possible collisions ! " << player.isCollidingWithGround(ground) << std::endl;
+							if (player.isCollidingWithGround(ground)) {
+								player.move(-((moveSpeed * deltaTime) * topDirections[topDirectionIndex]));
+							}
+						}
+					}
 				}
+
+
+				while (window.pollEvent(event))
+				{
+					if (event.type == sf::Event::Closed)
+						window.close();
+					if (event.type == sf::Event::MouseButtonReleased)
+					{
+						if (event.mouseButton.button == sf::Mouse::Left)
+						{
+							spaceReleased = true;
+						}
+					}
+				}
+
+				window.clear();
+
+				window.draw(lblScore);
+				window.draw(lblLife);
+				window.draw(lblBigMessage);
+
+				window.setView(view);
+
+
+				//Screen Position follow player
+				if (player.getX() + 10 > screenDimensionX / 2)
+					screenPosition.x = player.getX() + 10;
+				else
+					screenPosition.x = screenDimensionX / 2;
+
+				if (player.getY() + 10 > screenDimensionY / 2)
+					screenPosition.y = player.getY() + 10;
+				else
+					screenPosition.y = screenDimensionY / 2;
+
+				view.setCenter(screenPosition);
+
+				//Player Tile
+				player.drawTo(window);
+				//Stairs Tile
+				stairs.drawTo(window);
+				//Block Tile
+				for (int i = 0; i < wallVector.size(); i++) {
+					wallVector[i]->drawTo(window);
+				}
+				for (int i = 0; i < coinVector.size(); i++) {
+					coinVector[i]->drawTo(window);
+				}
+				for (int i = 0; i < enemyVector.size(); i++) {
+					enemyVector[i]->drawTo(window);
+				}
+				//Quadtree
+				//quadTree.Draw(window);
+
+				window.setView(window.getDefaultView());
+
+				window.display();
+			}
+			else {
+				while (window.pollEvent(event))
+				{
+					if (event.type == sf::Event::Closed)
+						window.close();
+				}
+
+				if (!first) {
+					// we put the screen back in the original direction
+					while (topDirectionIndex != 0) {
+
+						float currentStep = rotationStep * deltaTime;
+						if (currentRotation + currentStep > 90.f)
+						{
+							currentStep = 90.f - currentRotation;
+						}
+						currentRotation += currentStep;
+						view.rotate(currentStep);
+						player.rotate(currentStep);
+						if (currentRotation == 90.f) {
+							--nbSpacePressed;
+							//isRotating = false;
+							currentRotation = 0;
+							topDirectionIndex == 3 ? topDirectionIndex = 0 : topDirectionIndex += 1;
+						}
+					}
+
+					window.setView(view);
+					window.clear();
+
+					//Screen Position follow player
+					if (player.getX() + 10 > screenDimensionX / 2)
+						screenPosition.x = player.getX() + 10;
+					else
+						screenPosition.x = screenDimensionX / 2;
+
+					if (player.getY() + 10 > screenDimensionY / 2)
+						screenPosition.y = player.getY() + 10;
+					else
+						screenPosition.y = screenDimensionY / 2;
+
+					view.setCenter(screenPosition);
+
+					player.setPos({ (float)player.getX() + 35.f, (float)player.getY() - 90.f });
+
+					//Victory Message
+					sf::Text message;
+					message.setString("VICTORY !");
+					sf::Font font;
+					font.loadFromFile("res/fonts/minecraft.ttf");
+					message.setFont(font);
+					message.setCharacterSize(100);
+					sf::FloatRect messageRect = message.getLocalBounds();
+					message.setOrigin(messageRect.left + messageRect.width / 2.0f, messageRect.top + messageRect.height / 2.0f);
+					message.setPosition(sf::Vector2f(screenPosition.x, screenPosition.y - 100.f));
+
+					//Score message
+					sf::Text scoreMessage;
+					scoreMessage.setString(ssScore.str());
+					scoreMessage.setFont(font);
+					scoreMessage.setCharacterSize(40);
+					sf::FloatRect scoreMessageRect = scoreMessage.getLocalBounds();
+					scoreMessage.setOrigin(scoreMessageRect.left + scoreMessageRect.width / 2.0f, scoreMessageRect.top + scoreMessageRect.height / 2.0f);
+					scoreMessage.setPosition(sf::Vector2f(screenPosition.x - 20.f, screenPosition.y + 60.f));
+
+					window.draw(message);
+					window.draw(scoreMessage);
+					player.drawTo(window);
+
+					window.setView(window.getDefaultView());
+
+					window.display();
+
+					first = true;
+				}
+
+
 			}
 		}
-
-		window.clear();
-
-		window.draw(lblScore);
-		window.draw(lblLife);
-		window.draw(lblBigMessage);
-
-		window.setView(view);
-
-
-		//Screen Position follow player
-		if (player.getX() + 10 > screenDimensionX / 2)
-			screenPosition.x = player.getX() + 10;
-		else
-			screenPosition.x = screenDimensionX / 2;
-
-		if (player.getY() + 10 > screenDimensionY / 2)
-			screenPosition.y = player.getY() + 10;
-		else
-			screenPosition.y = screenDimensionY / 2;
-
-		view.setCenter(screenPosition);
-
-		//Player Tile
-		player.drawTo(window);
-		//Block Tile
-		for (int i = 0; i < wallVector.size(); i++) {
-			wallVector[i]->drawTo(window);
-		}
-		for (int i = 0; i < coinVector.size(); i++) {
-			coinVector[i]->drawTo(window);
-		}
-		for (int i = 0; i < enemyVector.size(); i++) {
-			enemyVector[i]->drawTo(window);
-		}
-		//Quadtree
-		quadTree.Draw(window);
-
-		window.setView(window.getDefaultView());
-
-		window.display();
 	}
 
 

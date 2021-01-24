@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Ground.h"
 #include "EmptySpace.h"
+#include "Stairs.h"
 
 
 class Player
@@ -57,6 +58,12 @@ public:
 	}
 	bool isCollidingWithGround(Ground* ground) {
 		if (player.getGlobalBounds().intersects(ground->getGlobalBounds())) {
+			return true;
+		}
+		return false;
+	}
+	bool isCollidingWithStairs(Stairs stairs) {
+		if (player.getGlobalBounds().intersects(stairs.getGlobalBounds())) {
 			return true;
 		}
 		return false;

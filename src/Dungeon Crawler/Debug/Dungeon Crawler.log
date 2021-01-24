@@ -1,76 +1,96 @@
 ﻿  main.cpp
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\Enemy.h(32,29): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Enemy.h(32,29): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\Enemy.h(35,29): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Enemy.h(35,29): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\Ground.h(25,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Ground.h(25,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\Ground.h(28,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Ground.h(28,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\EmptySpace.h(25,34): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\EmptySpace.h(25,34): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\EmptySpace.h(28,34): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\EmptySpace.h(28,34): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\Player.h(40,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Stairs.h(31,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\Player.h(43,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Stairs.h(34,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(530,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(570,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(573,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(576,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(577,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(586,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(591,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(592,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(605,20): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(613,21): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(628,21): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(683,100): warning C4244: 'argument' : conversion de 'int' en 'T', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Player.h(41,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(683,85): warning C4244: 'argument' : conversion de 'int' en 'T', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\Player.h(44,30): warning C4244: 'return' : conversion de 'const T' en 'int', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(715,37): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(546,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(592,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(595,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(598,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(599,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(608,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(613,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(614,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(627,20): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(638,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(653,21): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(782,102): warning C4244: 'argument' : conversion de 'int' en 'T', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(720,37): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(782,87): warning C4244: 'argument' : conversion de 'int' en 'T', perte possible de données
           with
           [
               T=float
           ]
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(729,21): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(732,21): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(735,21): warning C4018: '<' : incompatibilité signed/unsigned
-  Dungeon Crawler.vcxproj -> C:\Users\Muramash\Desktop\GameProjects\YNOV M1\Clean\Dungeon-Crawler\src\Debug\Dungeon Crawler.exe
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(820,39): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(825,39): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(836,23): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(839,23): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(842,23): warning C4018: '<' : incompatibilité signed/unsigned
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(884,40): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Dungeon Crawler\main.cpp(889,40): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+  Dungeon Crawler.vcxproj -> C:\Users\ocean\Desktop\Cours\one button project\git final\Dungeon-Crawler\src\Debug\Dungeon Crawler.exe
