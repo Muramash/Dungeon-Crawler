@@ -1,11 +1,14 @@
-#include <random>
+ï»¿#include <random>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <sstream>
 #include "Player.h"
 #include "Coin.h"
 #include "Ground.h"
 #include "Enemy.h"
 #include "QuadTree.h"
+#include "EmptySpace.h"
+
 
 namespace
 {
@@ -49,7 +52,9 @@ public:
 		ClosedDoor = '+',
 		OpenDoor = '-',
 		UpStairs = '<',
-		DownStairs = '>'
+		DownStairs = '>',
+		Coin = '*',
+		Enemy = '/'
 	};
 
 	enum Direction
@@ -442,10 +447,28 @@ int main()
 	topDirections[2] = sf::Vector2f(0.f, 1.f);
 	topDirections[3] = sf::Vector2f(-1.f, 0.f);
 	int topDirectionIndex = 0;
+	//Empty textyre
+	sf::Texture emptyTexture;
 
 	//Wall texture
 	sf::Texture wallTexture;
-	if (!wallTexture.loadFromFile("src/Dungeon\ Crawler/res/img/wall.png")) {
+	if (!wallTexture.loadFromFile("res/img/wall.png")) {
+		std::cout << "Load failed" << std::endl;
+
+		system("pause");
+	}
+
+	//Coin texture
+	sf::Texture coinTexture;
+	if (!coinTexture.loadFromFile("res/img/coin.png")) {
+		std::cout << "Load failed" << std::endl;
+
+		system("pause");
+	}
+
+	//Enemy texture
+	sf::Texture enemyTexture;
+	if (!enemyTexture.loadFromFile("res/img/slime.jpg")) {
 		std::cout << "Load failed" << std::endl;
 
 		system("pause");
@@ -454,7 +477,7 @@ int main()
 	//Player instance
 	sf::Texture playertexture;
 
-	if (!playertexture.loadFromFile("src/Dungeon\ Crawler/res/img/slime.jpg")) {
+	if (!playertexture.loadFromFile("res/img/chara.png")) {
 		std::cout << "Load failed" << std::endl;
 
 		system("pause");
@@ -462,10 +485,51 @@ int main()
 	Player player({ 30,30 }, &playertexture);
 	player.setPos({ 50,500 });
 
+	//Game Over object
+	sf::Font minecraft;
+	minecraft.loadFromFile("res/fonts/Minecraft.ttf");
+
+	std::ostringstream ssBigMessage;
+	ssBigMessage << "";
+
+	sf::Text lblBigMessage;
+	lblBigMessage.setCharacterSize(100);
+	lblBigMessage.setPosition({ 50,200 });
+	lblBigMessage.setFont(minecraft);
+	lblBigMessage.setString(ssBigMessage.str());
+
+	//Score object
+	int score = 0;
+
+	std::ostringstream ssScore;
+	ssScore << "Score: " << score;
+
+	sf::Text lblScore;
+	lblScore.setCharacterSize(30);
+	lblScore.setPosition({ 10,10 });
+	lblScore.setFont(minecraft);
+	lblScore.setString(ssScore.str());
+
+	//Life object
+	int life = 3;
+
+	std::ostringstream ssLife;
+	ssLife << "HP: " << life;
+
+	sf::Text lblLife;
+	lblLife.setCharacterSize(30);
+	lblLife.setPosition({ 600,10 });
+	lblLife.setFont(minecraft);
+	lblLife.setString(ssLife.str());
+
+
 	//Handle all items from generated map
 	float LayerX = 0;
 	float LayerY = 0;
 	std::vector<Ground*> wallVector;
+	std::vector<Coin*> coinVector;
+	std::vector<Enemy*> enemyVector;
+	std::vector<EmptySpace*> emptyVector;
 
 	for (int i = 0; i < allTiles.size(); i++) {
 		//Go to a new line
@@ -487,12 +551,55 @@ int main()
 		if (allTiles[i] == '>') {
 			player.setPos({ LayerY, LayerX });
 		}
+		//Generate coin or monster on empty space
+		if (allTiles[i] == ' ') {
+			EmptySpace* emptySpace = new EmptySpace({ globalBlocSizeX, globalBlocSizeY }, &emptyTexture);
+			emptyVector.push_back(emptySpace);
+			emptySpace->setPos({ LayerY, LayerX });
+
+		}
 		else {
 			//Empty for now
 		}
 		lineCheck = lineCheck++;
 
 		LayerY = LayerY + 40;
+	}
+	int emptyBlocNum = 0;
+	int coinChecker = 0;
+	int enemyChecker = 0;
+	int maxEnemyPerLevel = randomInt(5);
+	int maxCoinPerLevel = randomInt(5);
+
+	for (int i = 0; i < emptyVector.size(); i++) {
+		emptyBlocNum = emptyBlocNum + 1;
+	}
+	for (int i = 0; i < emptyVector.size(); i++) {
+		if (coinChecker <= maxCoinPerLevel) {
+			int randomEmpty = randomInt(emptyBlocNum);
+			float EmptyPosX = emptyVector[randomEmpty]->getX();
+			float EmptyPosY = emptyVector[randomEmpty]->getY();
+			coinChecker = coinChecker++;
+
+			Coin* coin = new Coin({ globalBlocSizeX, globalBlocSizeY }, &coinTexture);
+			coinVector.push_back(coin);
+			coin->setPos({ EmptyPosX, EmptyPosY });
+		}
+
+	}
+	for (int i = 0; i < emptyVector.size(); i++) {
+
+		if (enemyChecker <= maxEnemyPerLevel) {
+			std::cout << "i'm in ???" << std::endl;
+			int randomEmpty = randomInt(emptyBlocNum);
+			float EmptyPosX = emptyVector[randomEmpty]->getX();
+			float EmptyPosY = emptyVector[randomEmpty]->getY();
+			enemyChecker = enemyChecker++;
+
+			Enemy* enemy = new Enemy({ globalBlocSizeX, globalBlocSizeY }, &enemyTexture);
+			enemyVector.push_back(enemy);
+			enemy->setPos({ EmptyPosX, EmptyPosY });
+		}
 	}
 
 	//create quadTree to check collisions
@@ -507,6 +614,39 @@ int main()
 	while (window.isOpen())
 	{
 		deltaTime = clock.restart().asSeconds();
+		//Enemy logic
+		for (int i = 0; i < enemyVector.size(); i++) {
+			if (player.isCollidingWithEnemy(enemyVector[i])) {
+				score = score + 10;
+				life = life - 1;
+				ssScore.str("");
+				ssScore << "Score: " << score;
+				lblScore.setString(ssScore.str());
+				ssLife.str("");
+				ssLife << "HP:" << life;
+				lblLife.setString(ssLife.str());
+				enemyVector[i]->setPos({ 999999,999999 });
+			}
+		}
+
+		//Coin logic
+		for (int i = 0; i < coinVector.size(); i++) {
+			if (player.isCollidingWithCoin(coinVector[i])) {
+				coinVector[i]->setPos({ 999999,999999 });
+				score++;
+				ssScore.str("");
+				ssScore << "Score: " << score;
+				lblScore.setString(ssScore.str());
+			}
+		}
+
+		if (life <= 0) {
+			player.setPos({ 99999,999999 });
+			ssBigMessage.str("");
+			ssBigMessage << "GAME OVER";
+			lblBigMessage.setString(ssBigMessage.str());
+		}
+
 		sf::Event event;
 		//Movement Handling /!\ TEMPORARY FOR TEST PURPOSE ONLY
 		const float moveSpeed = 80.f;
@@ -551,8 +691,8 @@ int main()
 			player.move((moveSpeed * deltaTime) * topDirections[topDirectionIndex]);
 
 			// check possible collisions in this view
-			// bug au lancement tant qu'on ne tourne pas le perso il n'y a jamais aucune collision detecté
-			// bug les collisions se font que dans un certain rayon puis plus rien il faudrait refaire le quadtree à chaque fois que le player en sort ?
+			// bug au lancement tant qu'on ne tourne pas le perso il n'y a jamais aucune collision detectï¿½
+			// bug les collisions se font que dans un certain rayon puis plus rien il faudrait refaire le quadtree ï¿½ chaque fois que le player en sort ?
 			std::vector<Ground*> groundVector = quadTree.getObjects(sf::FloatRect(player.getX(), player.getY(), player.getGlobalBounds().height, player.getGlobalBounds().width));
 
 			for (Ground* ground : groundVector) {
@@ -581,9 +721,14 @@ int main()
 			}
 		}
 
+		window.clear();
+
+		window.draw(lblScore);
+		window.draw(lblLife);
+		window.draw(lblBigMessage);
 
 		window.setView(view);
-		window.clear();
+
 
 		//Screen Position follow player
 		if (player.getX() + 10 > screenDimensionX / 2)
@@ -597,11 +742,18 @@ int main()
 			screenPosition.y = screenDimensionY / 2;
 
 		view.setCenter(screenPosition);
+
 		//Player Tile
 		player.drawTo(window);
 		//Block Tile
 		for (int i = 0; i < wallVector.size(); i++) {
 			wallVector[i]->drawTo(window);
+		}
+		for (int i = 0; i < coinVector.size(); i++) {
+			coinVector[i]->drawTo(window);
+		}
+		for (int i = 0; i < enemyVector.size(); i++) {
+			enemyVector[i]->drawTo(window);
 		}
 		//Quadtree
 		quadTree.Draw(window);
